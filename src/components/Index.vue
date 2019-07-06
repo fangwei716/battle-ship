@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <span>turn: player{{game.turn + 1}}</span>
+    <el-tag class="header-tag" type="danger"> 
+      {{game.isEnd ? winner + ' is the winner!' : 'Turn: Player ' + (game.turn + 1)}} 
+    </el-tag>
+    <el-button v-if="game.isEnd" icon="el-icon-refresh" style="margin-left: 20px;" circle></el-button>
     <el-row>
       <el-col v-for="player in players" :key="'player' + player.index" :span="12">
         <div class="board-container">
@@ -22,7 +25,20 @@ export default {
   data() {
     return {
       game: null,
-      players: []
+      players: [],
+      winner: ""
+    }
+  },
+  watch: {
+    'game.isEnd': function(newVal) {
+      if(newVal && !this.winner){
+        this.winner = this.game.getWinner();
+        this.$notify({
+          title: 'Game end',
+          message: this.winner + ' won!',
+          type: 'success'
+        });
+      }
     }
   },
   created() {
@@ -35,18 +51,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+  .header-tag{
+    height: 48px;
+    line-height: 46px;
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
 </style>

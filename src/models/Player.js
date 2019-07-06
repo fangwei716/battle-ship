@@ -4,24 +4,18 @@ export default class Player {
         this.index = index;
         this.board = null;
         this.isMachine = !!isMachine;
-        this.battleShipNum = 0;
         this.initPlayer(index, gridX, gridY, battleShips);
     }
 
     initPlayer(index, gridX, gridY, battleShips) {
         this.board = new Board(index, gridX, gridY, battleShips);
-        this.battleShipNum = this.board.getBattleshipNum();
     }
 
     getHit(x, y) {
-        this.board.hit(x, y);
-    }
-
-    setBattleShipNum(){
-        this.battleShipNum = this.board.getBattleshipNum();
+        return this.board.hit(x, y);
     }
 
     getIsLost(){
-        return this.battleShipNum === 0;
+        return this.board.getRemainingBattleShipNum() === 0;
     }
 }

@@ -3,6 +3,7 @@ import Config from "./Config";
 export default class Game {
     constructor(numOfPlayers, gridX, gridY, battleShips, numOfMachine) {
         this.players = [];
+        this.isEnd = false;
         this.numOfPlayers = numOfPlayers ? numOfPlayers : Config.defaultPlayerNum;
         this.numOfMachine = Config.enableMachinePlayer ? numOfMachine : 0;
         this.totalPlayerCount = this.numOfPlayers + this.numOfMachine;
@@ -31,26 +32,39 @@ export default class Game {
     }
 
     makeMove(targetIndex, x, y) {
-        if (this.turn === targetIndex) {
+        if (this.turn === targetIndex || this.isEnd) {
             // can not hit itself
             return;
         }
         this.moves.push([this.turn, targetIndex]);
-        this.getPlayer(targetIndex).getHit(x, y);
         this.turn = (this.turn + 1) % this.numOfPlayers;
+        var hitInfo = this.getPlayer(targetIndex).getHit(x, y);
+        this.getRemainPlayersCount();
+        return hitInfo;
+    }
+
+    getMoveCount(index){
+        return Math.floor(this.moves.length / this.totalPlayerCount) + (this.moves.length % this.totalPlayerCount > index ? 1 : 0);
     }
 
     getRemainPlayersCount() {
         this.remainPlayersCount = 0;
-        for (var i = 0; i < this.numOfPlayers; i++) {
+        for (let i = 0; i < this.totalPlayerCount; i++) {
             if (!this.players[i].getIsLost()){
                 this.remainPlayersCount++;
             }
         }
+        this.isEnd = this.remainPlayersCount === 1;
     }
 
-    getSummary() {
-
+    getWinner() {
+        let winner = "Player ";
+        for (let i = 0; i < this.totalPlayerCount; i++) {
+            if (!this.players[i].getIsLost()) {
+                winner += (i+1);
+                return winner;
+            }
+        }
     }
 
     endGame(){

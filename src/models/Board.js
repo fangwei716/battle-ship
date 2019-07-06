@@ -79,13 +79,20 @@ export default class Board {
             ship.hit();
             const isSunk = ship.getIsSunk();
             if (isSunk) {
-                this.sunkBattleShips.push(ship);
+                this.sunkBattleShips.push(ship.type);
             }
             this.clearBattleShip(x, y, ship, isSunk);
+            return {
+                hit: true,
+                sunk: isSunk,
+                ship: ship.type
+            };
         }else{
             this.grid[x][y] = -2; //missed
+            return {
+                hit: false
+            };
         }
-        console.log(this.grid[x][y]);
     }
 
     clearBattleShip(x, y, ship, isSunk) {
@@ -96,18 +103,14 @@ export default class Board {
         //clear rest of ship when sunk
         for (let i = 0; i < this.gridX; i++) {
             for (let j = 0; j < this.gridY; j++) {
-                if (this.grid[i][j] && this.grid[i][j] === ship.index) {
-                    this.grid[i][j] = -1; //empty cells
+                if (this.grid[i][j] >= 0 && this.grid[i][j] === ship.index) {
+                    this.grid[i][j] = -3; //consider as hit
                 }
             }
         }
     }
 
-    setBattleShipNum() {
-        this.battleShipNum = this.battleShips.length - this.sunkBattleShips.length;
-    }
-
-    getBattleshipNum() {
-        return this.battleShipNum;
+    getRemainingBattleShipNum() {
+        return this.battleShips.length - this.sunkBattleShips.length;
     }
 }

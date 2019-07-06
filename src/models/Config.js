@@ -1,13 +1,13 @@
 export default {
-    enableRotation:false, //enable rotation
-    enableSunkNumMode: false, //have to sunk all to destroy a battle ship
+    enableRotation: true, //enable rotation
+    enableSunkNumMode: true, //have to sunk all to destroy a battle ship
     enableMachinePlayer: false,
     enableMoreThanTwoPlayer: false,
     defaultPlayerNum:2,
     maxPlayerNum: 8,
     defaultGridX:8,
     defaultGridY:8,
-    defaultBattleShips:['L','SQ','I','I'],
+    defaultBattleShips:['L', 'SQ', 'I', 'I'],
     battleShipTypes: {
         'L': {
             shape: [
@@ -15,7 +15,7 @@ export default {
                 ['*', 'o'],
                 ['*', '*']
             ],
-            total: 5,
+            total: 4,
             sunkNum: 3
         },
         'SQ': {
