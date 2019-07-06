@@ -35,7 +35,7 @@ export default class Board {
             }
         });
         let count = 0;
-        while (failed.length > 0 && count < 1000) {
+        while (failed.length > 0 && count < 10000) {
             count++;
             var elem = failed.pop();
             if (!this.placeShip(elem)){
@@ -48,8 +48,20 @@ export default class Board {
         const shape = ship.shape;
         const lenX = shape.length;
         const lenY = shape[0].length;
-        const beginX = this.getRandom(8 - lenX);
-        const beginY = this.getRandom(8 - lenY);
+        const beginX = this.getRandom(this.gridX - lenX);
+        const beginY = this.getRandom(this.gridY - lenY);
+        if (beginX > 0 && this.grid[beginX-1][beginY] >= 0){
+            return false;
+        }
+        if (beginY > 0 && this.grid[beginX][beginY-1] >= 0) {
+            return false;
+        }
+        if (beginX < this.gridX - 1 && this.grid[beginX+1][beginY] >= 0) {
+            return false;
+        }
+        if (beginY < this.gridY - 1 && this.grid[beginX][beginY+1] >= 0) {
+            return false;
+        }
         //test round, make sure no cells are occupied
         for(let i = 0; i < lenX; i++){
            for (let j = 0; j < lenY; j++) {

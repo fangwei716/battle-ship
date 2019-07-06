@@ -3,6 +3,7 @@ export default class Player {
     constructor(index, gridX, gridY, battleShips, isMachine) {
         this.index = index;
         this.board = null;
+        this.lost = false;
         this.isMachine = !!isMachine;
         this.initPlayer(index, gridX, gridY, battleShips);
     }
@@ -16,6 +17,7 @@ export default class Player {
     }
 
     getIsLost(){
-        return this.board.getRemainingBattleShipNum() === 0;
+        this.lost = this.board.getRemainingBattleShipNum() === 0;
+        return this.lost;
     }
 }

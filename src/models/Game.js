@@ -3,6 +3,7 @@ import Config from "./Config";
 export default class Game {
     constructor(numOfPlayers, gridX, gridY, battleShips, numOfMachine) {
         this.players = [];
+        this.remainingPlayers = [];
         this.isEnd = false;
         this.numOfPlayers = numOfPlayers ? numOfPlayers : Config.defaultPlayerNum;
         this.numOfMachine = Config.enableMachinePlayer ? numOfMachine : 0;
@@ -20,10 +21,12 @@ export default class Game {
         for (var i = 0; i < this.numOfPlayers; i++) {
             //human player
             this.players.push(new Player(i, this.gridX, this.gridY, this.battleShips));
+            this.remainingPlayers.push(i);
         }
         for (var j = 0; j < this.numOfMachine; j++) {
             //AI player
             this.players.push(new Player(j + this.numOfPlayers, this.gridX, this.gridY, this.battleShips, true));
+            this.remainingPlayers.push(j + this.numOfPlayers);
         }
     }
 
@@ -37,10 +40,19 @@ export default class Game {
             return;
         }
         this.moves.push([this.turn, targetIndex]);
-        this.turn = (this.turn + 1) % this.numOfPlayers;
         var hitInfo = this.getPlayer(targetIndex).getHit(x, y);
         this.getRemainPlayersCount();
+        this.turn = this.findNextTurn(this.turn);
         return hitInfo;
+    }
+
+    findNextTurn(turn){
+        for (let i = 0; i < this.remainingPlayers.length; i++) {
+            if (this.remainingPlayers[i] > turn) {
+                return this.remainingPlayers[i];
+            }
+        }
+        return this.remainingPlayers[0];
     }
 
     getMoveCount(index){
@@ -49,9 +61,11 @@ export default class Game {
 
     getRemainPlayersCount() {
         this.remainPlayersCount = 0;
+        this.remainingPlayers = [];
         for (let i = 0; i < this.totalPlayerCount; i++) {
             if (!this.players[i].getIsLost()){
                 this.remainPlayersCount++;
+                this.remainingPlayers.push(i);
             }
         }
         this.isEnd = this.remainPlayersCount === 1;

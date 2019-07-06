@@ -3,10 +3,10 @@ export default {
     enableSunkNumMode: true, //have to sunk all to destroy a battle ship
     enableMachinePlayer: false,
     enableMoreThanTwoPlayer: false,
-    defaultPlayerNum:2,
+    defaultPlayerNum:3,
     maxPlayerNum: 8,
-    defaultGridX:8,
-    defaultGridY:8,
+    defaultGridX: 8,
+    defaultGridY: 8,
     defaultBattleShips:['L', 'SQ', 'I', 'I'],
     battleShipTypes: {
         'L': {
