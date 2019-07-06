@@ -13,29 +13,86 @@ export class Board {
     }
 
     initBoard(battleShipTypes) {
-        var rotation = 0;
-        for (var i = 0; i < battleShipTypes.length; i++) {
+        let rotation = 0;
+        for (let i = 0; i < battleShipTypes.length; i++) {
             if (Config.enableRotation) {
-                rotation = Math.floor(Math.random() * Math.floor(4));
+                rotation = this.getRandom(4);
             }
             this.battleShips[i] = new Ship(battleShipTypes[i], i, rotation);
         }
         this.placeShips(this.battleShips);
     }
 
-    placeShips(){
+    placeShips(ships){
+        let failed = [];
+        ships.forEach((ship) => {
+            if(!this.placeShip(ship)){
+                failed.push(ship);
+            }
+        });
+        while(failed.length > 0){
+            var elem = failed.pop();
+            if (!this.placeShip(elem)){
+                failed.push(elem);
+            }
+        }
+    }
 
+    placeShip(ship){
+        const shape = ship.shape;
+        const lenX = shape.length;
+        const lenY = shape[0].length;
+        const beginX = this.getRandom(8 - lenX);
+        const beginY = this.getRandom(8 - lenY);
+        //test round, make sure no cells are occupied
+        for(let i = 0; i < lenX; i++){
+           for (let j = 0; j < lenY; j++) {
+                if (shape[i][j] === '*' && this.grid[beginX + i][beginY + j]) {
+                    return false; //occupied
+                }
+           }
+        }
+        for (let i = 0; i < lenX; i++) {
+            for (let j = 0; j < lenY; j++) {
+                if (shape[i][j] === '*') {
+                    this.grid[beginX + i][beginY + j] = {
+                        ship: ship.index
+                    }
+                }
+            }
+        }
+    }
+
+    getRandom(num){
+        return Math.floor(Math.random() * Math.floor(num));
     }
 
     hit(x, y){
         if (this.grid[x][y]){
             //hit a target
+            let ship = this.battleShips(this.grid[x][y].ship);
+            const isSunk = ship.getIsSunk();
+            if (isSunk) {
+                this.sunkBattleShips.push(ship);
+            }
+            this.clearBattleShip(x, y, ship, isSunk);
         }
     }
 
-    clearBattleShip(x, y, ship){
+    clearBattleShip(x, y, ship, isSunk) {
+        if (!isSunk){
+            this.grid[x][y] = null;
+        }
         if (!Config.enableSunkNumMode) {
             return;
+        }
+        //clear rest of ship
+        for (let i = 0; i < this.gridX; i++) {
+            for (let j = 0; j < this.gridY; j++) {
+                if (this.grid[i][j] && this.grid[i][j].ship === ship.index) {
+                    this.grid[i][j] = null;
+                }
+            }
         }
     }
 

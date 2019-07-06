@@ -1,9 +1,11 @@
 import {Player} from "Player";
 import {Config} from "Config";
 export class Game {
-    constructor(numOfPlayers, gridX, gridY, battleShips) {
-        this.players = new Array(numOfPlayers);
+    constructor(numOfPlayers, gridX, gridY, battleShips, numOfMachine) {
+        this.players = [];
         this.numOfPlayers = numOfPlayers ? numOfPlayers : Config.defaultPlayerNum;
+        this.numOfMachine = Config.enableMachinePlayer ? numOfMachine : 0;
+        this.totalPlayerCount = this.numOfPlayers + this.totalPlayerCount;
         this.remainPlayersCount = this.numOfPlayers;
         this.turn = 0;
         this.moves = [];
@@ -12,7 +14,12 @@ export class Game {
 
     initPlayer(gridX, gridY, battleShips) {
         for (var i = 0; i < this.numOfPlayers; i++) {
-            this.players[i] = new Player(i, gridX, gridY, battleShips);
+            //human player
+            this.players.push(new Player(i, gridX, gridY, battleShips));
+        }
+        for (var j = 0; j < this.numOfMachine; j++) {
+            //AI player
+            this.players.push(new Player(j + this.numOfPlayers, gridX, gridY, battleShips, true));
         }
     }
 

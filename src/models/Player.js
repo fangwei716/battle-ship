@@ -1,8 +1,9 @@
 import {Board} from "Board";
 export class Player {
-    constructor(index, gridX, gridY, battleShips) {
+    constructor(index, gridX, gridY, battleShips, isMachine) {
         this.index = index;
         this.board = null;
+        this.isMachine = !!isMachine;
         this.battleShipNum = 0;
         this.initPlayer(index, gridX, gridY, battleShips);
     }
