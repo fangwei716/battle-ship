@@ -1,6 +1,6 @@
-import {Ship} from "Ship";
-import {Config} from "Config";
-export class Board {
+import Ship from "./Ship";
+import Config from "./Config";
+export default class Board {
     constructor(index, gridX, gridY, battleShipTypes) {
         this.index = index;
         this.gridX = gridX;
@@ -61,6 +61,7 @@ export class Board {
                 }
             }
         }
+        return true;
     }
 
     getRandom(num){
@@ -98,5 +99,9 @@ export class Board {
 
     setBattleShipNum() {
         this.battleShipNum = this.battleShips.length - this.sunkBattleShips.length;
+    }
+
+    getBattleshipNum() {
+        return this.battleShipNum;
     }
 }

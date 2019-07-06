@@ -4,6 +4,7 @@ export default {
     enableMachinePlayer: false,
     enableMoreThanTwoPlayer: false,
     defaultPlayerNum:2,
+    maxPlayerNum: 8,
     defaultGridX:8,
     defaultGridY:8,
     defaultBattleShips:['L','SQ','I','I'],

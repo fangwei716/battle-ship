@@ -1,5 +1,5 @@
-import {Config} from "Config";
-export class Ship {
+import Config from "./Config";
+export default class Ship {
     constructor(type, index, rotation) {
         this.index = index;
         this.type = type;

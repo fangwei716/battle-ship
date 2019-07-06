@@ -1,5 +1,5 @@
-import {Board} from "Board";
-export class Player {
+import Board from "./Board";
+export default class Player {
     constructor(index, gridX, gridY, battleShips, isMachine) {
         this.index = index;
         this.board = null;
