@@ -49,8 +49,17 @@ export default {
     },
     hit(x, y){
       const hitResult = this.game.makeMove(this.player.index, x, y);
+      this.$forceUpdate();
       if(this.game.isEnd){
-        return this.$forceUpdate();
+        return;
+      }else if(this.player.lost){
+        this.$notify({
+          title: 'Hit',
+          message: 'Player ' + (this.player.index + 1) + ' lost!',
+          type: 'success',
+          duration: 2500
+        });
+        return;
       }
       if(hitResult.hit){
         this.$notify({
@@ -67,7 +76,6 @@ export default {
           duration: 1500
         });
       }
-      this.$forceUpdate();
     }
   }
 }

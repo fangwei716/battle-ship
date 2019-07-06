@@ -7,7 +7,7 @@ export default {
     maxPlayerNum: 8,
     defaultGridX: 8,
     defaultGridY: 8,
-    defaultBattleShips:['L', 'SQ', 'I', 'I'],
+    defaultBattleShips:['L'],
     battleShipTypes: {
         'L': {
             shape: [

@@ -5,7 +5,7 @@
     </el-tag>
     <el-button v-if="game.isEnd" icon="el-icon-refresh" style="margin-left: 20px;" circle></el-button>
     <el-row>
-      <el-col v-for="player in players" :key="'player' + player.index" :span="12">
+      <el-col v-if="game.isEnd || !player.lost" v-for="player in getVisiblePlayers(players)" :key="'player' + player.index" :span="12">
         <div class="board-container">
           <Board :player="player" :game="game"/>
         </div>
@@ -45,6 +45,15 @@ export default {
     let game =  new Game();
     this.game = game;
     this.players = game.players;
+  },
+  methods: {
+    getVisiblePlayers(players){
+      if(this.game.isEnd){
+        return players;
+      }else{
+        return players.filter(e => !e.lost);
+      }
+    }
   }
 }
 </script>
