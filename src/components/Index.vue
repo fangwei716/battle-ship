@@ -1,9 +1,10 @@
 <template>
   <div class="container">
+    <span>turn: player{{game.turn + 1}}</span>
     <el-row>
       <el-col v-for="player in players" :key="'player' + player.index" :span="12">
         <div class="board-container">
-          <Board :player="player"/>
+          <Board :player="player" :game="game"/>
         </div>
       </el-col>
     </el-row>
@@ -15,14 +16,19 @@ import Board from '@/components/Board.vue'
 import Game from '@/models/Game'
 export default {
   name: 'Index',
+  components: {
+      Board
+  },
   data() {
     return {
+      game: null,
       players: []
     }
   },
   created() {
     let game =  new Game();
-    console.log(game);
+    this.game = game;
+    this.players = game.players;
   }
 }
 </script>

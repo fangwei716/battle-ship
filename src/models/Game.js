@@ -5,7 +5,7 @@ export default class Game {
         this.players = [];
         this.numOfPlayers = numOfPlayers ? numOfPlayers : Config.defaultPlayerNum;
         this.numOfMachine = Config.enableMachinePlayer ? numOfMachine : 0;
-        this.totalPlayerCount = this.numOfPlayers + this.totalPlayerCount;
+        this.totalPlayerCount = this.numOfPlayers + this.numOfMachine;
         this.remainPlayersCount = this.numOfPlayers;
         this.turn = 0;
         this.moves = [];
@@ -31,8 +31,12 @@ export default class Game {
     }
 
     makeMove(targetIndex, x, y) {
+        if (this.turn === targetIndex) {
+            // can not hit itself
+            return;
+        }
         this.moves.push([this.turn, targetIndex]);
-        this.getPlayer(this.turn).hit(x, y);
+        this.getPlayer(targetIndex).getHit(x, y);
         this.turn = (this.turn + 1) % this.numOfPlayers;
     }
 

@@ -13,6 +13,10 @@ export default class Player {
         this.battleShipNum = this.board.getBattleshipNum();
     }
 
+    getHit(x, y) {
+        this.board.hit(x, y);
+    }
+
     setBattleShipNum(){
         this.battleShipNum = this.board.getBattleshipNum();
     }
