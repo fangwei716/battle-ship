@@ -1,9 +1,9 @@
 export default {
     enableRotation: true, //enable rotation
-    enableSunkNumMode: true, //have to sunk all to destroy a battle ship
+    enableSunkNumMode: false, //have to sunk all to destroy a battle ship
     enableMachinePlayer: false,
-    enableMoreThanTwoPlayer: false,
-    defaultPlayerNum:3,
+    enableMoreThanTwoPlayer: true,
+    defaultPlayerNum: 2,
     maxPlayerNum: 8,
     defaultGridX: 8,
     defaultGridY: 8,

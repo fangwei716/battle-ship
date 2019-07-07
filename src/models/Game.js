@@ -1,7 +1,7 @@
 import Player from "./Player";
 import Config from "./Config";
 export default class Game {
-    constructor(numOfPlayers, gridX, gridY, battleShips, numOfMachine) {
+    constructor(numOfPlayers, numOfMachine, gridX, gridY, battleShips) {
         this.players = [];
         this.remainingPlayers = [];
         this.isEnd = false;
