@@ -149,12 +149,4 @@ export default class Game {
             }
         }
     }
-
-    endGame(){
-        return this.getSummary();
-    }
-
-    saveToLocalStorage(){
-        
-    }
 }
