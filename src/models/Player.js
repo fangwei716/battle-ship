@@ -26,7 +26,7 @@ export default class Player {
         while (queue.length > 0) {
             [x, y] = queue.shift();
             if (x >= 0 && y >= 0 && x < gridX && y < gridY) {
-                if(grid[x][y] >= 0){
+                if(grid[x][y] >= -1){
                     return [x, y];
                 }else{
                     queue.push([x - 1, y]);

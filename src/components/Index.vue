@@ -5,7 +5,7 @@
     </el-tag>
     <el-button @click="startNewGame()" v-if="game && game.isEnd" icon="el-icon-refresh" style="margin-left: 20px;" circle></el-button>
     <el-row>
-      <el-col v-for="player in getVisiblePlayers(players)" :key="'player' + player.index" :span="12">
+      <el-col v-for="player in getVisiblePlayers(players)" :key="'player' + player.index" :md="12" :sm="24">
         <div class="board-container">
           <Board :player="player" :game="game"/>
         </div>
@@ -13,9 +13,9 @@
     </el-row>
     <el-dialog width="500px" :show-close="false" title="Start Game" :visible="dialogVisible">
       <span>{{hasPrev ? 'Do you want to restore game or start a new game ?' : 'Start a new game?'}}</span>
-      <el-form v-if="enableMoreThanTwoPlayer || enableMachinePlayer" style="width: 450px;">
-        <el-form-item label="Human Player">
-          <el-radio-group v-if="enableMoreThanTwoPlayer" v-model="numOfHuman">
+      <el-form v-if="enableMoreThanTwoPlayer || enableMachinePlayer" style="width: 450px; margin-top: 30px;">
+        <el-form-item v-if="enableMoreThanTwoPlayer" label="Human Player">
+          <el-radio-group v-model="numOfHuman">
             <el-radio-button v-if="enableMachinePlayer" label="1"></el-radio-button>
             <el-radio-button label="2"></el-radio-button>
             <el-radio-button label="3"></el-radio-button>
@@ -57,7 +57,7 @@ export default {
       players: [],
       winner: "",
       dialogVisible: false,
-      numOfHuman: "2",
+      numOfHuman: (!Config.enableMoreThanTwoPlayer && Config.enableMachinePlayer) ? "1" : "2",
       numOfMachine: "0",
       enableMachinePlayer: Config.enableMachinePlayer,
       enableMoreThanTwoPlayer: Config.enableMoreThanTwoPlayer
@@ -87,7 +87,6 @@ export default {
       this.dialogVisible = true;
       let battleGame = localStorage.getItem('battleGame');
       let prevGame = JSON.parse(battleGame);
-      console.log(prevGame);
       if(prevGame && prevGame.players){
         this.hasPrev = true;
         this.initGame(prevGame);
@@ -107,6 +106,16 @@ export default {
       let game =  new Game(prevGame, numOfHuman, numOfMachine);
       this.game = game;
       this.players = game.players;
+      if(!game.getIsInitializedCorrectly()){
+        //not initialized correctly
+        this.$alert('Fail to initialize the game correctly, please try again.', 'Technical Error', {
+          confirmButtonText: 'Restart',
+          callback: action => {
+            this.hasPrev = false;
+            this.startNewGame();
+          }
+        });
+      }
     },
     getVisiblePlayers(players){
       if(this.game.isEnd){

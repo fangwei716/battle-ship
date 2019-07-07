@@ -42,14 +42,15 @@ export default class Board {
                 failed.push(elem);
             }
         }
+        this.battleShipNum = this.battleShipNum - failed.length;
     }
 
     placeShip(ship){
         const shape = ship.shape;
         const lenX = shape.length;
         const lenY = shape[0].length;
-        const beginX = this.getRandom(this.gridX - lenX);
-        const beginY = this.getRandom(this.gridY - lenY);
+        const beginX = this.getRandom(this.gridX + 1 - lenX);
+        const beginY = this.getRandom(this.gridY + 1 - lenY);
         if (beginX > 0 && this.grid[beginX-1][beginY] >= 0){
             return false;
         }

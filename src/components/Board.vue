@@ -3,7 +3,7 @@
     <el-card class="board" :style="'width:' + 55*gridX + 'px;'">
       <div slot="header" class="clearfix">
         <div>
-          <el-badge :is-dot="game.turn === player.index && !game.isEnd">Player {{player.index + 1}}</el-badge>
+          <el-badge :is-dot="game.turn === player.index && !game.isEnd">{{player.isMachine ? 'Machine ' : ''}}Player {{player.index + 1}}</el-badge>
         </div>
         <div style="font-size: 16px;" v-if="game.isEnd" class="summary">Shot fired: {{getShotFired()}}; Ships sunk: {{this.board.sunkBattleShips.length > 0 ? this.board.sunkBattleShips.join(", ") : 'None'}}</div>
       </div>

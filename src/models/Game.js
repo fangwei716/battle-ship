@@ -68,6 +68,17 @@ export default class Game {
         }
     }
 
+    getIsInitializedCorrectly(){
+        //correct players
+        let valid = this.totalPlayerCount === this.players.length;
+        //correct grid
+        for (let i = 0; i < this.players.length; i++) {
+            const player = this.players[i];
+            valid = valid && player.board.battleShipNum === this.battleShips.length;
+        }
+        return valid;
+    }
+
     getPlayer(i) {
         return this.players[i]
     }
