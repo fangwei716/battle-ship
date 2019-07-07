@@ -23,13 +23,13 @@ export default class Game {
     }
 
     initPlayer() {
-        for (var i = 0; i < this.numOfPlayers; i++) {
+        for (let i = 0; i < this.numOfPlayers; i++) {
             //human player
             this.players.push(new Player(i, this.gridX, this.gridY, this.battleShips));
             this.remainingPlayers.push(i);
         }
-        for (var j = 0; j < this.numOfMachine; j++) {
-            //AI player
+        for (let j = 0; j < this.numOfMachine; j++) {
+            //Machine player
             this.players.push(new Player(j + this.numOfPlayers, this.gridX, this.gridY, this.battleShips, true));
             this.remainingPlayers.push(j + this.numOfPlayers);
         }
@@ -47,7 +47,7 @@ export default class Game {
         this.totalPlayerCount = previousData.totalPlayerCount;
         this.remainPlayersCount = previousData.remainPlayersCount;
         this.battleShips = previousData.battleShips;
-        for (var i = 0; i < previousData.players.length; i++) {
+        for (let i = 0; i < previousData.players.length; i++) {
             //human player
             let prevPlayer = previousData.players[i];
             let player = new Player(i, this.gridX, this.gridY, this.battleShips, prevPlayer.isMachine);
@@ -89,7 +89,7 @@ export default class Game {
             return;
         }
         this.moves.push([this.turn, targetIndex]);
-        var hitInfo = this.getPlayer(targetIndex).getHit(x, y);
+        const hitInfo = this.getPlayer(targetIndex).getHit(x, y);
         this.getRemainPlayersCount();
         this.turn = this.findNextTurn(this.turn);
         if (this.getPlayer(this.turn).isMachine){
@@ -107,7 +107,7 @@ export default class Game {
     }
 
     getRandomTargetPlayer() {
-        var random = this.remainingPlayers[Math.floor(Math.random() * Math.floor(this.remainingPlayers.length))];
+        const random = this.remainingPlayers[Math.floor(Math.random() * Math.floor(this.remainingPlayers.length))];
         if(random === this.turn){
             return this.getRandomTargetPlayer();
         }else{

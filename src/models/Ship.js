@@ -25,8 +25,8 @@ export default class Ship {
 
     rotate90(shape) {
         let newShape = [...new Array(shape[0].length)].map(() => new Array(shape.length).fill(-1));
-        for (var i = 0; i < newShape.length; i++) {
-            for (var j = 0; j < newShape[i].length; j++) {
+        for (let i = 0; i < newShape.length; i++) {
+            for (let j = 0; j < newShape[i].length; j++) {
                 newShape[i][j] = shape[newShape[i].length - j - 1][i];
             }
         }
@@ -35,8 +35,8 @@ export default class Ship {
 
     rotate180(shape){
         let newShape = [...new Array(shape.length)].map(() => new Array(shape[0].length).fill(-1));
-        for (var i = 0; i < newShape.length; i++) {
-            for (var j = 0; j < newShape[i].length; j++) {
+        for (let i = 0; i < newShape.length; i++) {
+            for (let j = 0; j < newShape[i].length; j++) {
                 newShape[i][j] = shape[newShape.length - i - 1][newShape[i].length - j - 1];
             }
         }
@@ -45,8 +45,8 @@ export default class Ship {
 
     rotate270(shape){
         let newShape = [...new Array(shape[0].length)].map(() => new Array(shape.length).fill(-1));
-        for (var i = 0; i < newShape.length; i++) {
-            for (var j = 0; j < newShape[i].length; j++) {
+        for (let i = 0; i < newShape.length; i++) {
+            for (let j = 0; j < newShape[i].length; j++) {
                 newShape[i][j] = shape[j][newShape.length - 1 - i];
             }
         }

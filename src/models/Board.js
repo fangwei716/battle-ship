@@ -37,7 +37,7 @@ export default class Board {
         let count = 0;
         while (failed.length > 0 && count < 10000) {
             count++;
-            var elem = failed.pop();
+            let elem = failed.pop();
             if (!this.placeShip(elem)){
                 failed.push(elem);
             }
