@@ -1,7 +1,8 @@
 import Player from "./Player";
+import Ship from "./Ship";
 import Config from "./Config";
 export default class Game {
-    constructor(numOfPlayers, numOfMachine, gridX, gridY, battleShips) {
+    constructor(previousData, numOfPlayers, numOfMachine, gridX, gridY, battleShips) {
         this.players = [];
         this.remainingPlayers = [];
         this.isEnd = false;
@@ -14,7 +15,11 @@ export default class Game {
         this.gridX = gridX ? gridX : Config.defaultGridX;
         this.gridY = gridY ? gridY : Config.defaultGridY;
         this.battleShips = battleShips ? battleShips : Config.defaultBattleShips;
-        this.initPlayer();
+        if (previousData) {
+            this.resetGame(previousData);
+        }else{
+            this.initPlayer();
+        }
     }
 
     initPlayer() {
@@ -27,6 +32,39 @@ export default class Game {
             //AI player
             this.players.push(new Player(j + this.numOfPlayers, this.gridX, this.gridY, this.battleShips, true));
             this.remainingPlayers.push(j + this.numOfPlayers);
+        }
+    }
+
+    resetGame(previousData) {
+        this.gridX = previousData.gridX;
+        this.gridY = previousData.gridY;
+        this.moves = previousData.moves;
+        this.turn = previousData.turn;
+        this.isEnd = previousData.isEnd;
+        this.remainingPlayers = previousData.remainingPlayers;
+        this.numOfPlayers = previousData.numOfPlayers;
+        this.numOfMachine = previousData.numOfMachine;
+        this.totalPlayerCount = previousData.totalPlayerCount;
+        this.remainPlayersCount = previousData.remainPlayersCount;
+        this.battleShips = previousData.battleShips;
+        for (var i = 0; i < previousData.players.length; i++) {
+            //human player
+            let prevPlayer = previousData.players[i];
+            let player = new Player(i, this.gridX, this.gridY, this.battleShips, prevPlayer.isMachine);
+            player.lost = prevPlayer.lost;
+            player.board.grid = prevPlayer.board.grid;
+            player.board.battleShipNum = prevPlayer.board.battleShipNum;
+            player.board.sunkBattleShips = prevPlayer.board.sunkBattleShips;
+            let battleShips = [];
+            for (let j = 0; j < prevPlayer.board.battleShips.length; j++) {
+                const prevBattleShip = prevPlayer.board.battleShips[j];
+                let battleShip = new Ship(prevBattleShip.type, j);
+                battleShip.hitNum = prevBattleShip.hitNum;
+                battleShip.shape = prevBattleShip.shape;
+                battleShips.push(battleShip);
+            }
+            player.board.battleShips = battleShips;
+            this.players.push(player);
         }
     }
 

@@ -1,9 +1,9 @@
 <template>
-  <div class="container">
+  <div class="container" :key="componentKey">
     <el-tag v-if="game.players" class="header-tag" type="danger"> 
       {{game && game.isEnd ? winner + ' is the winner!' : 'Turn: Player ' + (game.turn + 1)}} 
     </el-tag>
-    <el-button v-if="game && game.isEnd" icon="el-icon-refresh" style="margin-left: 20px;" circle></el-button>
+    <el-button @click="startNewGame()" v-if="game && !game.isEnd" icon="el-icon-refresh" style="margin-left: 20px;" circle></el-button>
     <el-row>
       <el-col v-for="player in getVisiblePlayers(players)" :key="'player' + player.index" :span="12">
         <div class="board-container">
@@ -45,10 +45,11 @@ import Config from '@/models/Config'
 export default {
   name: 'Index',
   components: {
-      Board
+    Board
   },
   data() {
     return {
+      componentKey: 0,
       game: {},
       players: [],
       winner: "",
@@ -72,21 +73,37 @@ export default {
   },
   created() {
     this.startGame();
+    window.onbeforeunload = () => {
+      localStorage.setItem('battleGame', JSON.stringify(this.game));
+    };
   },
   methods: {
+    restart(){
+      this.$router.go(0);
+    },
     startGame(){
+      let battleGame = localStorage.getItem('battleGame');
+      let prevGame =  JSON.parse(battleGame);
+      if(prevGame){
+        this.initGame(prevGame);
+      }else{
+        this.startNewGame();
+      }
+    },
+    startNewGame(){
       if(!Config.enableMoreThanTwoPlayer){
         this.initGame();
       }else{
         this.dialogVisible = true;
       }
+      this.componentKey += 1;
     },
     initGameWithConfig(){
-      this.initGame(+this.numOfHuman, +this.numOfMachine);
+      this.initGame(null, +this.numOfHuman, +this.numOfMachine);
       this.dialogVisible = false;
     },
-    initGame(numOfHuman, numOfMachine){
-      let game =  new Game(numOfHuman, numOfMachine);
+    initGame(prevGame, numOfHuman, numOfMachine){
+      let game =  new Game(prevGame, numOfHuman, numOfMachine);
       this.game = game;
       this.players = game.players;
     },
