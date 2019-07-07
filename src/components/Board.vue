@@ -10,7 +10,7 @@
       <div :class="{'grid-container': true, 'blur': game.turn === player.index && !game.isEnd }" :style="'width:' + (5 + 50*gridX) + 'px;height:' + (5 + 50*gridY) + 'px;'">
         <div class="row" :key="player.index + '-' + rowIndex" v-for="(row, rowIndex) in board.grid">
           <div class="cell" :key="player.index + '-' + rowIndex + '-' + columnIndex" v-for="(cell, columnIndex) in row">
-            <span @click="hit(rowIndex, columnIndex)" v-if="cell >= -1" class="cell-available">{{cell}}</span>
+            <span @click="hit(rowIndex, columnIndex)" v-if="cell >= -1" class="cell-available"></span>
             <span v-if="cell === -2" class="miss"></span>
             <span v-if="cell === -3" class="hit"></span>
           </div>

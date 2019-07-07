@@ -3,7 +3,7 @@
     <el-tag v-if="game.players" class="header-tag" type="danger"> 
       {{game && game.isEnd ? winner + ' is the winner!' : 'Turn: Player ' + (game.turn + 1)}} 
     </el-tag>
-    <el-button @click="startNewGame()" v-if="game && !game.isEnd" icon="el-icon-refresh" style="margin-left: 20px;" circle></el-button>
+    <el-button @click="startNewGame()" v-if="game && game.isEnd" icon="el-icon-refresh" style="margin-left: 20px;" circle></el-button>
     <el-row>
       <el-col v-for="player in getVisiblePlayers(players)" :key="'player' + player.index" :span="12">
         <div class="board-container">
@@ -12,9 +12,10 @@
       </el-col>
     </el-row>
     <el-dialog width="500px" :show-close="false" title="Start Game" :visible="dialogVisible">
-      <el-form style="width: 450px;">
+      <span>{{hasPrev ? 'Do you want to restore game or start a new game ?' : 'Start a new game?'}}</span>
+      <el-form v-if="enableMoreThanTwoPlayer || enableMachinePlayer" style="width: 450px;">
         <el-form-item label="Human Player">
-          <el-radio-group v-model="numOfHuman">
+          <el-radio-group v-if="enableMoreThanTwoPlayer" v-model="numOfHuman">
             <el-radio-button v-if="enableMachinePlayer" label="1"></el-radio-button>
             <el-radio-button label="2"></el-radio-button>
             <el-radio-button label="3"></el-radio-button>
@@ -32,7 +33,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="initGameWithConfig()">Start</el-button>
+        <el-button type="primary" @click="initGameWithConfig()">Start New Game</el-button>
+        <el-button v-if="hasPrev" @click="dialogVisible = false">Restore Game</el-button>
       </div>
     </el-dialog>
   </div>
@@ -50,13 +52,15 @@ export default {
   data() {
     return {
       componentKey: 0,
+      hasPrev: false,
       game: {},
       players: [],
       winner: "",
       dialogVisible: false,
       numOfHuman: "2",
       numOfMachine: "0",
-      enableMachinePlayer: Config.enableMachinePlayer
+      enableMachinePlayer: Config.enableMachinePlayer,
+      enableMoreThanTwoPlayer: Config.enableMoreThanTwoPlayer
     }
   },
   watch: {
@@ -68,6 +72,7 @@ export default {
           message: this.winner + ' won!',
           type: 'success'
         });
+        this.hasPrev = false;
       }
     }
   },
@@ -78,29 +83,25 @@ export default {
     };
   },
   methods: {
-    restart(){
-      this.$router.go(0);
-    },
     startGame(){
+      this.dialogVisible = true;
       let battleGame = localStorage.getItem('battleGame');
-      let prevGame =  JSON.parse(battleGame);
-      if(prevGame){
+      let prevGame = JSON.parse(battleGame);
+      console.log(prevGame);
+      if(prevGame && prevGame.players){
+        this.hasPrev = true;
         this.initGame(prevGame);
       }else{
-        this.startNewGame();
+        this.hasPrev = false;
       }
     },
     startNewGame(){
-      if(!Config.enableMoreThanTwoPlayer){
-        this.initGame();
-      }else{
-        this.dialogVisible = true;
-      }
-      this.componentKey += 1;
+      this.dialogVisible = true;
     },
     initGameWithConfig(){
       this.initGame(null, +this.numOfHuman, +this.numOfMachine);
       this.dialogVisible = false;
+      this.componentKey += 1;
     },
     initGame(prevGame, numOfHuman, numOfMachine){
       let game =  new Game(prevGame, numOfHuman, numOfMachine);
