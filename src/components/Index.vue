@@ -110,7 +110,7 @@ export default {
         //not initialized correctly
         this.$alert('Fail to initialize the game correctly, please try again.', 'Technical Error', {
           confirmButtonText: 'Restart',
-          callback: action => {
+          callback: () => {
             this.hasPrev = false;
             this.startNewGame();
           }
