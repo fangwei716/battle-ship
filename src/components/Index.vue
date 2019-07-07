@@ -15,15 +15,15 @@
       <el-form style="width: 450px;">
         <el-form-item label="Human Player">
           <el-radio-group v-model="numOfHuman">
-            <el-radio-button label="1"></el-radio-button>
+            <el-radio-button v-if="enableMachinePlayer" label="1"></el-radio-button>
             <el-radio-button label="2"></el-radio-button>
             <el-radio-button label="3"></el-radio-button>
             <el-radio-button label="4"></el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="Machine Player">
+        <el-form-item v-if="enableMachinePlayer" label="Machine Player">
           <el-radio-group v-model="numOfMachine">
-            <el-radio-button label="0"></el-radio-button>
+            <el-radio-button v-if="numOfHuman !== '1'" label="0"></el-radio-button>
             <el-radio-button label="1"></el-radio-button>
             <el-radio-button label="2"></el-radio-button>
             <el-radio-button label="3"></el-radio-button>
@@ -55,8 +55,7 @@ export default {
       dialogVisible: false,
       numOfHuman: "2",
       numOfMachine: "0",
-      minPlayerNum: 2,
-      maxPlayerNum: Config.maxPlayerNum
+      enableMachinePlayer: Config.enableMachinePlayer
     }
   },
   watch: {

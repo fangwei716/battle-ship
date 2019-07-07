@@ -50,7 +50,7 @@ export default {
     hit(x, y){
       const hitResult = this.game.makeMove(this.player.index, x, y);
       this.$forceUpdate();
-      if(this.game.isEnd){
+      if(this.game.isEnd || !hitResult){
         return;
       }else if(this.player.lost){
         this.$notify({

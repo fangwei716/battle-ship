@@ -43,7 +43,27 @@ export default class Game {
         var hitInfo = this.getPlayer(targetIndex).getHit(x, y);
         this.getRemainPlayersCount();
         this.turn = this.findNextTurn(this.turn);
+        if (this.getPlayer(this.turn).isMachine){
+            //next is robot
+            setTimeout(() => {
+                const randomTarget = this.getRandomTargetPlayer();
+                const randomPos = this.getPlayer(randomTarget).machinePlay();
+                if(!randomPos){
+                    return;
+                }
+                this.makeMove(randomTarget, randomPos[0], randomPos[1]);
+            }, 2000);
+        }
         return hitInfo;
+    }
+
+    getRandomTargetPlayer() {
+        var random = this.remainingPlayers[Math.floor(Math.random() * Math.floor(this.remainingPlayers.length))];
+        if(random === this.turn){
+            return this.getRandomTargetPlayer();
+        }else{
+            return random;
+        }
     }
 
     findNextTurn(turn){
