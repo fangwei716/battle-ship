@@ -22,7 +22,7 @@ export default class Player {
         let x = this.board.getRandom(gridX);
         let y = this.board.getRandom(gridY);
         let queue = [[x, y]];
-        //bsf
+        //bfs
         while (queue.length > 0) {
             [x, y] = queue.shift();
             if (x >= 0 && y >= 0 && x < gridX && y < gridY) {

@@ -10,8 +10,8 @@
       <div :class="{'grid-container': true, 'blur': game.turn === player.index && !game.isEnd }" :style="'width:' + (5 + 50*gridX) + 'px;height:' + (5 + 50*gridY) + 'px;'">
         <div class="row" :key="player.index + '-' + rowIndex" v-for="(row, rowIndex) in board.grid">
           <div class="cell" :key="player.index + '-' + rowIndex + '-' + columnIndex" v-for="(cell, columnIndex) in row">
-            <span @click="hit(rowIndex, columnIndex)" v-if="cell >= -1" class="cell-available"></span>
-            <span v-if="cell === -2" class="miss"></span>
+            <span @click="hit(rowIndex, columnIndex)" v-if="cell >= -1" class="cell-available">{{cell}}</span>
+            <span v-if="cell === -2" :style="'background: ' + getHasNeighbor(rowIndex, columnIndex)"></span>
             <span v-if="cell === -3" class="hit"></span>
           </div>
         </div>
@@ -46,6 +46,21 @@ export default {
   methods: {
     getShotFired(){
       return this.game.getMoveCount(this.player.index);
+    },
+    getHasNeighbor(rowIndex, columnIndex){
+      if(rowIndex > 0 && [-1, -2].indexOf(this.board.grid[rowIndex - 1][columnIndex]) < 0){
+        return 'Teal';
+      }
+      if(columnIndex > 0 && [-1, -2].indexOf(this.board.grid[rowIndex][columnIndex - 1]) < 0){
+        return 'Teal';
+      }
+      if(rowIndex !== this.gridX - 1 && [-1, -2].indexOf(this.board.grid[rowIndex + 1][columnIndex]) < 0){
+        return 'Teal';
+      }
+      if(columnIndex !== this.gridY - 1 && [-1, -2].indexOf(this.board.grid[rowIndex][columnIndex + 1]) < 0){
+        return 'Teal';
+      }
+      return 'Grey';
     },
     hit(x, y){
       const hitResult = this.game.makeMove(this.player.index, x, y);
